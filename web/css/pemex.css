@@ -1,0 +1,119 @@
+
+:root {
+  --verde-pemex: #006341;
+  --rojo-pemex: #c8102e;
+  --gris-claro: #f4f4f4;
+  --gris-medio: #cccccc;
+  --negro-suave: #333333;
+}
+
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--gris-claro);
+  color: var(--negro-suave);
+  margin: 0;
+  padding: 0;
+}
+
+
+header {
+  background-color: var(--verde-pemex);
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+
+button, .btn {
+  background-color: var(--verde-pemex);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+button:hover, .btn:hover {
+  background-color: var(--rojo-pemex);
+}
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin: 1rem 0;
+}
+
+th, td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--gris-medio);
+}
+
+th {
+  background-color: var(--verde-pemex);
+  color: white;
+}
+
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--gris-medio);
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--verde-pemex);
+  outline: none;
+}
+
+
+footer {
+  background-color: var(--verde-pemex);
+  color: white;
+  text-align: center;
+  padding: 0.5rem;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+
+.card {
+  background-color: white;
+  border: 1px solid var(--gris-medio);
+  border-left: 5px solid var(--verde-pemex);
+  padding: 1rem;
+  margin: 1rem 0;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+}
+
+
+.login-container {
+  max-width: 400px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: white;
+  border: 1px solid var(--gris-medio);
+  border-left: 5px solid var(--verde-pemex);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+h1, h2, h3 {
+  color: var(--verde-pemex);
+}
