@@ -1,6 +1,6 @@
 package modelo;
 
-public class Entrega {
+public class RegistroEntrega {
 
     private String fecha;
     private int idVehiculo;

@@ -56,6 +56,8 @@ public class CompararEntregasServlet extends HttpServlet {
                 resultado.put("cliente", nombreCliente);
                 resultado.put("destino", nombreDestino);
                 resultado.put("tiempo_entrega", tiempoEntrega);
+                resultado.put("idcliente", idCliente);
+                resultado.put("iddestino", idDestino);
                 resultado.put("valido", existe);
                 resultados.add(resultado);
             } catch (SQLException ex) {

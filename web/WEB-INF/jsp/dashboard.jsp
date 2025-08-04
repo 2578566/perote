@@ -67,7 +67,8 @@
             <br>
             <button onclick="agregarFila()">Agregar fila</button>
             <button onclick="compararConTiempos()">Comparar con Tiempos</button>
-
+            <button onclick="guardarEntregasValidadas()">Guardar validaciones</button> <br><br>
+            <button onclick="generarReporte()">Reporte: Entregas más largas</button>
 
 
             <script>
@@ -135,7 +136,11 @@
                     celda = fila.insertCell();
                     const btnEliminar = document.createElement("button");
                     btnEliminar.textContent = "Eliminar";
-                    btnEliminar.onclick = () => fila.remove();
+                    btnEliminar.onclick = () => {
+                        if (confirm("¿Estás seguro de eliminar esta fila?")) {
+                            fila.remove();
+                        }
+                    };
                     celda.appendChild(btnEliminar);
                 }
 
@@ -173,9 +178,10 @@
                                     const nombreCliente = res.cliente;
                                     const nombreDestino = res.destino;
                                     const tiempoEntrega = res.tiempo_entrega;
+
                                     if (res.valido) {
-                                        celdaCliente.innerHTML = '<span style="color: green; font-weight: bold;">' + nombreCliente + '</span>';
-                                        celdaDestino.innerHTML = '<span style="color: green; font-weight: bold;">' + nombreDestino + '</span>';
+                                        celdaCliente.innerHTML = '<span style="color: green; font-weight: bold;" data-id="' + res.idcliente + '">' + nombreCliente + '</span>';
+                                        celdaDestino.innerHTML = '<span style="color: green; font-weight: bold;" data-id="' + res.iddestino + '">' + nombreDestino + '</span>';
                                         celdaTiempo.innerHTML = tiempoEntrega;
                                     } else {
                                         celdaCliente.innerHTML = `<span style="color: red; font-weight: bold;">Cliente no existe</span>`;
@@ -223,6 +229,7 @@
                 }
 
                 document.addEventListener('DOMContentLoaded', () => {
+                    /////////////ordena columnas
                     const tabla = document.getElementById("tablaExcel");
                     const headers = tabla.querySelectorAll("th");
                     let asc = true;
@@ -255,6 +262,92 @@
                         });
                     });
                 });
+
+                function guardarEntregasValidadas() {
+                    const filas = document.querySelectorAll("#tablaExcel tbody tr");
+                    const entregasValidadas = [];
+
+                    filas.forEach(fila => {
+                        const celdaCliente = fila.children[3];
+                        const celdaDestino = fila.children[4];
+                        const spanCliente = celdaCliente.querySelector("span");
+                        const spanDestino = celdaDestino.querySelector("span");
+
+                        const esValidado = spanCliente?.style.color === "green" && spanDestino?.style.color === "green";
+
+                        if (esValidado) {
+                            const entrega = {
+                                idRegistro: fila.children[0].textContent.trim(),
+                                fecha: fila.children[1].textContent.trim(),
+                                idVehiculo: fila.children[2].textContent.trim(),
+                                idCliente: spanCliente.dataset.id,
+                                idDestino: spanDestino.dataset.id,
+                                idProducto: fila.children[5].textContent.trim(),
+                                cantidad: fila.children[6].textContent.trim()
+                            };
+                            entregasValidadas.push(entrega);
+                        }
+                    });
+
+                    if (entregasValidadas.length === 0) {
+                        alert("No hay entregas validadas para guardar.");
+                        return;
+                    }
+
+                    fetch("RegistroEntregasServlet", {
+                        method: "POST",
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(entregasValidadas)
+                    })
+                            .then(res => res.text())
+                            .then(msg => {
+                                alert("Entregas guardadas correctamente.");
+                                console.log(msg);
+                            })
+                            .catch(err => {
+                                console.error("Error al guardar:", err);
+                                alert("Error al guardar las entregas.");
+                            });
+                }
+
+
+                function generarReporte() {
+                    fetch("ReporteEntregasLentasServlet")
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.length === 0) {
+                                    alert("No se encontraron entregas.");
+                                    return;
+                                }
+
+                                let tabla = "<table border='1' style='width:100%; margin-top:20px;'>";
+                                tabla += "<tr><th>ID Registro</th><th>Fecha</th><th>Cliente</th><th>Destino</th><th>Vehículo</th><th>Producto</th><th>Cantidad</th><th>Duración (horas)</th></tr>";
+
+                                data.forEach(e => {
+                                    console.log(e);
+                                    tabla += '<tr>' +
+                                            '<td>' + e.id_registro + '</td>' +
+                                            '<td>' + e.fecha + '</td>' +
+                                            '<td>' + e.cliente + '</td>' +
+                                            '<td>' + e.destino + '</td>' +
+                                            '<td>' + e.vehiculo + '</td>' +
+                                            '<td>' + e.producto + '</td>' +
+                                            '<td>' + e.cantidad + '</td>' +
+                                            '<td>' + e.tiempo + '</td>' +
+                                            '</tr>';
+                                });
+
+                                tabla += "</table>";
+                                const div = document.createElement("div");
+                                div.innerHTML = "<h3>Entregas con mayor duración estimada</h3>" + tabla;
+                                document.body.appendChild(div);
+                            })
+                            .catch(err => {
+                                console.error(err);
+                                alert("Error al generar el reporte.");
+                            });
+                }
+
             </script>
 
 

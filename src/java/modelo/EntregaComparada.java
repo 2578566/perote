@@ -2,19 +2,19 @@ package modelo;
 
 public class EntregaComparada {
 
-    private Entrega entrega;
+    private RegistroEntrega entrega;
     private double tiempoEntrega;
 
-    public EntregaComparada(Entrega entrega, double tiempoEntrega) {
+    public EntregaComparada(RegistroEntrega entrega, double tiempoEntrega) {
         this.entrega = entrega;
         this.tiempoEntrega = tiempoEntrega;
     }
 
-    public Entrega getEntrega() {
+    public RegistroEntrega getEntrega() {
         return entrega;
     }
 
-    public void setEntrega(Entrega entrega) {
+    public void setEntrega(RegistroEntrega entrega) {
         this.entrega = entrega;
     }
 
